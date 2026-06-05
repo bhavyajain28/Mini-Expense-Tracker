@@ -1,0 +1,57 @@
+# Mini Expense Tracker — System Requirements
+# Install the tools listed below before running the project.
+
+# ─── Runtime ───────────────────────────────────────────────
+Node.js >= 18.0.0        # https://nodejs.org
+npm    >= 9.0.0          # Bundled with Node.js
+
+# ─── Containerization (optional) ───────────────────────────
+Docker         >= 24.0.0 # https://docs.docker.com/get-docker/
+Docker Compose >= 2.20.0 # Bundled with Docker Desktop
+
+# ─── Cloud Deployment (optional) ───────────────────────────
+Azure CLI      >= 2.50.0 # https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+Azure Account            # Azure for Students — https://azure.microsoft.com/en-us/free/students/
+
+# ─── Version Control ───────────────────────────────────────
+Git >= 2.40.0            # https://git-scm.com
+
+# ─── Backend Dependencies (auto-installed via npm) ─────────
+cors               ^2.8.5
+dotenv             ^16.3.1
+express            ^4.18.2
+express-validator  ^7.0.1
+uuid               ^9.0.0
+
+# ─── Backend Dev Dependencies ──────────────────────────────
+nodemon   ^3.0.1
+supertest ^6.3.3
+vitest    ^1.6.0
+
+# ─── Frontend Dependencies (auto-installed via npm) ────────
+axios            ^1.6.2
+react            ^18.2.0
+react-dom        ^18.2.0
+react-router-dom ^6.21.0
+recharts         ^2.10.1
+
+# ─── Frontend Dev Dependencies ─────────────────────────────
+@testing-library/jest-dom    ^6.1.5
+@testing-library/react       ^14.1.2
+@testing-library/user-event  ^14.5.1
+@vitejs/plugin-react         ^4.2.1
+autoprefixer                 ^10.4.16
+jsdom                        ^23.0.1
+postcss                      ^8.4.32
+tailwindcss                  ^3.4.0
+vitest                       ^1.6.0
+
+# ─── Install Instructions ──────────────────────────────────
+# Backend:
+#   cd server && npm install
+#
+# Frontend:
+#   cd client && npm install
+#
+# Docker (full stack):
+#   docker compose up --build
