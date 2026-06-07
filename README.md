@@ -1,319 +1,290 @@
 # Mini Expense Tracker
 
-A production-ready full-stack web application for tracking daily expenses, analyzing spending patterns, managing category budgets, and visualizing financial data.
+## Project Title & Brief Description
+
+Mini Expense Tracker is a full-stack web application built to help users track daily expenses, manage category-wise budgets, and analyze spending habits through interactive dashboards and visualizations. The project was developed as a production-ready expense management solution featuring expense CRUD operations, analytics, budget tracking, filtering, CSV export, and responsive UI support.
 
 ---
 
-## Features
+## Live Demo Links
 
-### Core
-- **Expense CRUD** — Create, read, update, and delete expenses
-- **Expense Fields** — Amount, Category, Date, optional Note
-- **Category Filtering** — Filter by category and date range
-- **Persistent Filters** — Last used filters saved to localStorage
+**Frontend:** https://gentle-forest-0a3cd2f00.7.azurestaticapps.net/
 
-### Analytics Dashboard
-- Total spent this month
-- Highest expense
-- Total spending by category
-- Category pie chart and bar chart
-
-### Budget Management
-- Set monthly budgets per category
-- Real-time budget vs. spend progress bars
-- Visual warnings for near-limit and exceeded budgets
-
-### Export
-- CSV export of currently filtered expenses
-
-### UI
-- Mobile-first responsive design (mobile, tablet, desktop)
-- Skeleton loaders during data fetch
-- Empty states and error states
-- Modern SaaS-style card-based dashboard
-
----
-
-## Screenshots
-
-| Dashboard | Expenses | Analytics | Budgets |
-|-----------|----------|-----------|---------|
-| _(add screenshot)_ | _(add screenshot)_ | _(add screenshot)_ | _(add screenshot)_ |
-
----
-
-## Architecture
-
-```
-mini-expense-tracker/
-├── client/                   # React + Vite frontend
-│   └── src/
-│       ├── api/              # Axios API layer
-│       ├── components/       # Reusable UI components
-│       │   ├── shared/       # Button, Card, Modal, Input, Badge, Skeleton
-│       │   ├── expenses/     # ExpenseForm, ExpenseTable, ExpenseModal, ExpenseFilters
-│       │   ├── analytics/    # Charts, AnalyticsCard
-│       │   └── budget/       # BudgetCard, BudgetForm, BudgetProgress
-│       ├── hooks/            # useExpenses, useFilters, useAnalytics, useBudgets
-│       ├── layouts/          # AppLayout, Sidebar
-│       ├── pages/            # Dashboard, Expenses, Analytics, Budgets, NotFound
-│       ├── routes/           # React Router config
-│       └── utils/            # currency, date, csv, categories
-│
-└── server/                   # Node.js + Express backend
-    └── src/
-        ├── config/           # Environment config
-        ├── controllers/      # Route handlers
-        ├── services/         # Business logic
-        ├── middleware/       # Error, validation, notFound
-        ├── routes/           # Express routers
-        ├── utils/            # response helpers, file store
-        └── data/             # expenses.json, budgets.json (JSON persistence)
-```
+**Backend API:** https://expense-tracker-eme7g4ghdkggg7f2.eastasia-01.azurewebsites.net
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | React, Vite, React Router, Tailwind CSS |
-| Charts | Recharts |
-| HTTP | Axios |
-| Backend | Node.js, Express |
-| Validation | express-validator |
-| IDs | UUID |
-| Persistence | JSON files |
-| Testing | Vitest, React Testing Library, Supertest |
-| Containers | Docker, Docker Compose |
-| Deployment | Azure Static Web Apps (frontend), Azure App Service (backend) |
+### Frontend
+- React.js – Component-based UI development
+- Vite – Fast development and build tool
+- React Router – Client-side routing
+- Tailwind CSS – Responsive styling
+- Recharts – Data visualization and analytics charts
+- Axios – API communication
+
+### Backend
+- Node.js – Runtime environment
+- Express.js – REST API framework
+- express-validator – Request validation
+- UUID – Unique ID generation
+
+### Storage
+- JSON File Storage – Lightweight persistence for expenses and budgets
+
+### Testing
+- Vitest
+- React Testing Library
+- Supertest
+
+### Deployment
+- Azure Static Web Apps (Frontend)
+- Azure App Service (Backend)
 
 ---
 
-## Local Setup
+## How to Run Locally
 
 ### Prerequisites
-- Node.js 18+
-- npm 9+
 
-### Backend
+- Node.js (v18 or later)
+
+### Clone Repository
+
+```bash
+git clone https://github.com/bhavyajain28/Mini-Expense-Tracker.git
+cd Mini-Expense-Tracker
+```
+
+### Backend Setup
 
 ```bash
 cd server
-cp .env.example .env
 npm install
+cp .env.example .env
 npm run dev
 ```
 
-Server starts at `http://localhost:5000`
+Backend runs at:
 
-### Frontend
+```text
+http://localhost:5000
+```
+
+### Frontend Setup
+
+Open a new terminal:
 
 ```bash
 cd client
-cp .env.example .env
-# Edit .env: VITE_API_BASE_URL=http://localhost:5000
 npm install
+cp .env.example .env
+```
+
+Update the .env file:
+
+```env
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+Run:
+
+```bash
 npm run dev
 ```
 
-App opens at `http://localhost:5173`
+Frontend runs at:
 
----
-
-## Docker Setup
-
-### Development
-
-```bash
-docker compose up --build
+```text
+http://localhost:5173
 ```
-
-- Frontend: `http://localhost:80`
-- Backend: `http://localhost:5000`
-
-### Production
-
-```bash
-# Create .env with:
-# API_URL=https://your-backend-url.azurewebsites.net
-# CLIENT_URL=https://your-frontend.azurestaticapps.net
-
-docker compose -f docker-compose.prod.yml up --build
-```
-
----
-
-## Azure Deployment
-
-### Backend — Azure App Service (Container)
-
-1. **Create Resource Group**
-   ```bash
-   az group create --name expense-tracker-rg --location eastus
-   ```
-
-2. **Create Container Registry**
-   ```bash
-   az acr create --resource-group expense-tracker-rg \
-     --name expensetrackercr --sku Basic
-   az acr login --name expensetrackercr
-   ```
-
-3. **Build and Push Backend Image**
-   ```bash
-   cd server
-   docker build -t expensetrackercr.azurecr.io/expense-server:latest .
-   docker push expensetrackercr.azurecr.io/expense-server:latest
-   ```
-
-4. **Create App Service Plan**
-   ```bash
-   az appservice plan create --name expense-tracker-plan \
-     --resource-group expense-tracker-rg --sku B1 --is-linux
-   ```
-
-5. **Deploy Backend**
-   ```bash
-   az webapp create --resource-group expense-tracker-rg \
-     --plan expense-tracker-plan \
-     --name expense-tracker-api \
-     --deployment-container-image-name expensetrackercr.azurecr.io/expense-server:latest
-   ```
-
-6. **Set Backend Environment Variables**
-   ```bash
-   az webapp config appsettings set \
-     --resource-group expense-tracker-rg \
-     --name expense-tracker-api \
-     --settings \
-       PORT=5000 \
-       NODE_ENV=production \
-       ALLOWED_ORIGIN=https://your-frontend.azurestaticapps.net
-   ```
-
-### Frontend — Azure Static Web Apps
-
-1. **Build Frontend**
-   ```bash
-   cd client
-   VITE_API_BASE_URL=https://expense-tracker-api.azurewebsites.net npm run build
-   ```
-
-2. **Deploy via Azure CLI**
-   ```bash
-   az staticwebapp create \
-     --name expense-tracker-frontend \
-     --resource-group expense-tracker-rg \
-     --source ./client/dist \
-     --location eastus
-   ```
-
-   Or deploy via GitHub Actions by connecting your repository in the Azure Portal.
 
 ---
 
 ## API Documentation
 
 ### Base URL
-`http://localhost:5000`
 
-### Health
+```text
+http://localhost:5000
+```
 
+### Health Check
+
+#### GET /health
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "status": "ok"
+  }
+}
 ```
-GET /health
-→ { success: true, data: { status: "ok", timestamp: "..." } }
-```
+
+---
 
 ### Expenses
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/expenses | List all expenses |
-| GET | /api/expenses/:id | Get single expense |
-| POST | /api/expenses | Create expense |
-| PUT | /api/expenses/:id | Update expense |
-| DELETE | /api/expenses/:id | Delete expense |
+#### GET /api/expenses
 
-**POST /api/expenses body:**
+Returns all expenses.
+
+#### GET /api/expenses/:id
+
+Returns a single expense.
+
+#### POST /api/expenses
+
+Request
+
 ```json
 {
-  "amount": 45.50,
+  "amount": 500,
   "category": "Food",
-  "date": "2024-01-15",
+  "date": "2026-01-01",
   "note": "Lunch"
 }
 ```
 
-**Validation rules:**
-- `amount` — required, positive number
-- `category` — required, must be: Food, Transport, Housing, Entertainment, Healthcare, Shopping, Education, Other
-- `date` — required, ISO date, cannot be in the future
-- `note` — optional string
+Response
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
+
+#### PUT /api/expenses/:id
+
+Updates an existing expense.
+
+#### DELETE /api/expenses/:id
+
+Deletes an expense.
+
+---
 
 ### Budgets
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/budgets | List all budgets |
-| POST | /api/budgets | Create/update budget |
-| PUT | /api/budgets/:category | Update budget amount |
-| DELETE | /api/budgets/:category | Remove budget |
+#### GET /api/budgets
 
-### Response Format
+Returns all budgets.
 
-**Success:**
+#### POST /api/budgets
+
+Request
+
 ```json
-{ "success": true, "data": {} }
+{
+  "category": "Food",
+  "amount": 5000
+}
 ```
 
-**Error:**
+Response
+
 ```json
-{ "success": false, "message": "Error message" }
+{
+  "success": true,
+  "data": {}
+}
+```
+
+#### PUT /api/budgets/:category
+
+Updates a budget.
+
+#### DELETE /api/budgets/:category
+
+Deletes a budget.
+
+### Standard Response Format
+
+Success:
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
+
+Error:
+
+```json
+{
+  "success": false,
+  "message": "Error message"
+}
 ```
 
 ---
 
-## Testing
+## Project Structure
 
-### Backend Tests
-
-```bash
-cd server
-npm test
+```text
+mini-expense-tracker/
+│
+├── client/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── routes/
+│   │   └── utils/
+│
+├── server/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── data/
+│
+├── docker-compose.yml
+├── docker-compose.prod.yml
+└── README.md
 ```
 
-Tests cover:
-- GET /health
-- Expense CRUD (all endpoints)
-- Validation: negative amount, future date, missing category
-- Budget CRUD
+### Folder Overview
 
-### Frontend Tests
-
-```bash
-cd client
-npm test
-```
-
-Tests cover:
-- ExpenseForm rendering
-- Form validation (amount, category)
-- Submit with correct data
-- Initial values when editing
-- Analytics calculation logic
+- client/ → React frontend application
+- server/ → Express backend API
+- controllers/ → Route handling logic
+- services/ → Business logic
+- routes/ → API endpoints
+- middleware/ → Validation and error handling
+- data/ → JSON-based persistence storage
 
 ---
 
-## Future Improvements
+## Next Steps
 
-- Authentication and multi-user support
+The following features were intentionally left out to keep the project focused and manageable:
+
+- User Authentication & Authorization
+- Multi-user expense management
+- Database migration to PostgreSQL or MongoDB
 - Recurring expenses
-- Multiple currencies
-- Dark mode
-- Mobile native app (React Native)
-- Export to PDF
+- PDF export support
 - Email budget alerts
-- Bank CSV import
-- PostgreSQL backend for scale
-- GraphQL API
+- Dark mode
+- Mobile application version
+- Bank statement import
+
+Future development would focus on authentication, cloud database integration, recurring transactions, and advanced financial reporting.
+
+---
+
+## Acknowledgements
+
+This project was designed, implemented, and deployed by the author. During development, AI-assisted tools were used for guidance, documentation refinement, deployment troubleshooting, and best-practice recommendations. In particular, Claude AI was used to help improve the README structure and assist with Azure deployment-related guidance. All final implementation decisions, code integration, testing, and deployment were completed by the author.
